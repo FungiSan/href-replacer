@@ -12,9 +12,10 @@ const storagedSettingsKey = 'linkReplacerSettings',
 	<input type="button" class="setting__delete" value="X" />';
 
 function initLinkReplacerSettings() {
-	const formElement = document.getElementById('settingsForm');
-	const saveButton = document.getElementById('saveButton');
-	const addRowButton = document.getElementById('addRowButton');
+	const formElement = document.getElementById('settingsForm'),
+		saveButton = document.getElementById('saveButton'),
+		addRowButton = document.getElementById('addRowButton');
+
 	if (!formElement || !saveButton) {
 		return;
 	}
@@ -49,10 +50,6 @@ function initHandlers() {
 	formElement.addEventListener('submit', saveSettings);
 
 	document.addEventListener('click', (e) => {
-		if (!e.target?.classList?.length) {
-			return;
-		}
-
 		if (e.target.classList.contains('setting__delete')) {
 			e.preventDefault();
 
@@ -64,13 +61,9 @@ function initHandlers() {
 		}
 
 		if (e.target.id === 'addRowButton') {
-			createEmptyRow(e);
+			createRow();
 		}
 	})
-}
-
-function createEmptyRow() {
-	createRow();
 }
 
 function createRow(linkData = {}) {
@@ -90,7 +83,6 @@ function createRow(linkData = {}) {
 		.replaceAll('#REPLACE_TO_VALUE#', linkData.replaceTo);
 
 	newRow.innerHTML = content;
-
 
 	formElement.append(newRow);
 }
@@ -129,4 +121,3 @@ function saveSettings() {
 
 	chrome.storage.local.set(result);
 }
-
