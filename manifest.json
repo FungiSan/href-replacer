@@ -1,0 +1,15 @@
+{
+  "name": "href replacer",
+  "version": "0.1",
+  "description": "replaces href to a specify domain",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "js": ["dist/main.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

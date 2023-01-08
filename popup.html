@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Настройки изменения href'ов</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			font-size: inherit;
+		}
+		html, body {
+			padding: 0;
+			margin: 0;
+		}
+		html {
+			font-size: 18px;
+			font-family: monospace;
+		}
+		body {
+			display: flex;
+			width: 100%;
+			min-height: 30em;
+			height: 100vh;
+			align-items: stretch;
+			background-color: #c9c3c1;
+		}
+		main {
+			width: 100%;
+			margin: 1em;
+			padding: 1em;
+			border: 2px solid #b9b5b1;
+			border-radius: 5px;
+			box-shadow: 0 0 0px 1px #cfc, 0 0 30px #cfc;
+		}
+		.settings {
+			display: flex;
+			flex-flow: column nowrap;
+		}
+		.settings__title {
+			font-size: 1.5em;
+			line-height: 1em;
+		}
+		.settings__form {
+			flex: 1;
+			overflow-y: auto;
+			border-block: 1px solid #393;
+		}
+
+		.settings__row {
+			position: relative;
+			display: flex;
+			flex-flow: row wrap;
+			column-gap: 2em;
+			width: 100%;
+			margin-bottom: .5em;
+			padding-bottom: .5em;
+			padding-right: 2em;
+		}
+		.settings__row::after {
+			content: '';
+			display: block;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background-image: linear-gradient(to right, #494, #383, #494);
+		}
+		.setting__delete {
+			position: absolute;
+			top: 50%;
+			right: 0;
+			transform: translateY(-50%);
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: center;
+			align-items: center;
+			width: auto;
+			height: 1.5em;
+			aspect-ratio: 1;
+			margin-left: auto;
+
+			background-color: #900;
+			border: none;
+			border-radius: 50%;
+			font-family: monospace;
+			color: #fff;
+			cursor: pointer;
+		}
+		.setting__delete:hover {
+			background-color: #700;
+		}
+		.settings__row input {
+			display: block;
+		}
+
+		.settings__buttons {
+			display: flex;
+			flex-flow: row wrap;
+			gap: 1em;
+			padding-top: 1em;
+		}
+		.settings__button {
+			flex: 1;
+			max-width: 15em;
+			border: 1px solid #ccc;
+			border-radius: .2em;
+			padding: .2em .5em;
+			font-size: 1em;
+			cursor: pointer;
+		}
+		.settings__save-button {
+			background-color: #282;
+			color: #fff;
+		}
+		.settings__save-button:hover {
+			background-color: #393;
+		}
+		.settings__save-button:active {
+			background-color: #171;
+		}
+
+		.settings__add-row-button {
+			background-color: #fff;
+		}
+		.settings__add-row-button:hover {
+			background-color: #eee;
+			color: #000;
+		}
+		.settings__add-row-button:active {
+			background-color: #fff;
+			color: #000;
+		}
+	</style>
+	<script src="./dist/settings.js"></script>
+</head>
+<body>
+	<main class="settings">
+		<h1 class="settings__title">Настройки замены ссылок</h1>
+		<form class="settings__form" id="settingsForm" action="#" method="POST">
+			<div class="settings__row">
+				<label>Искомая строка: <input type="text" name="regex"></label>
+				<label>На что заменить: <input type="text" name="replaceTo"></label>
+				<input type="button" class="setting__delete" value="X" />
+			</div>
+		</form>
+		<div class="settings__buttons">
+			<button id="addRowButton" class="settings__button settings__add-row-button">Добавить правило</button>
+			<button id="saveButton" class="settings__button settings__save-button">Сохранить</button>
+		</div>
+	</main>
+</body>
+</html>
