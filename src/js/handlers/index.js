@@ -1,25 +1,23 @@
 'use strict';
 
-if (document.readyState === 'loading') {
-	document.addEventListener('DOMContentLoaded', initLinkReplacer);
+if (globalThis.window.document.readyState === 'loading') {
+	globalThis.window.document.addEventListener('DOMContentLoaded', initLinkReplacer);
 } else {
 	initLinkReplacer();
 }
 
-const storagedSettingsKey = 'linkReplacerSettings';
-
 let replaceLinksMapper = [];
 function initLinkReplacer() {
-	if (typeof chrome?.storage?.sync?.set !== 'function') {
+	if (typeof chrome?.storage?.local?.get !== 'function') {
 		console.error('chrome storage is not accessible');
 
 		return;
 	}
 
-	chrome.storage.sync.get([storagedSettingsKey], (result) => {
-		replaceLinksMapper = result[storagedSettingsKey].links;
+	chrome.storage.local.get(['linkReplacerSettings'], function(result) {
+		replaceLinksMapper = result['linkReplacerSettings']?.links;
 
-		document.querySelectorAll('a').forEach(replaceLinkHref);
+		globalThis.window.document.querySelectorAll('a').forEach(replaceLinkHref);
 	});
 }
 
@@ -30,9 +28,9 @@ function replaceLinkHref(linkElement) {
 	}
 
 	for (let replaceLinkData of replaceLinksMapper) {
-		const regexp = new RegExp(replaceLinkData.regex, 'i');
+		const regexp = new RegExp(replaceLinkData.regex.replace('\\\\', '\\'), 'i');
 		if (currentHref.match(regexp)?.length > 0) {
-			currentHref.replace(regexp, replaceLinkData.replaceTo);
+			linkElement.href = currentHref.replace(regexp, replaceLinkData.replaceTo);
 		}
 	}
 }

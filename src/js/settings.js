@@ -7,8 +7,8 @@ if (document.readyState === 'loading') {
 }
 
 const storagedSettingsKey = 'linkReplacerSettings',
-	rowTemplate = '<label>Искомая строка: <input type="text" name="regex#ROW_ID#" value="#REGEX_VALUE#"></label>\
-	<label>На что заменить: <input type="text" name="replaceTo#ROW_ID#" value="#REPLACE_TO_VALUE#"></label>\
+	rowTemplate = '<label>Искомая строка: <input type="text" name="regex" value="#REGEX_VALUE#"></label>\
+	<label>На что заменить: <input type="text" name="replaceTo" value="#REPLACE_TO_VALUE#"></label>\
 	<input type="button" class="setting__delete" value="X" />';
 
 function initLinkReplacerSettings() {
@@ -24,15 +24,18 @@ function initLinkReplacerSettings() {
 }
 
 function initRows() {
-	if (typeof chrome?.storage?.sync?.get !== 'function') {
-		console.error(chrome?.storage);
+	if (typeof chrome?.storage?.local?.get !== 'function') {
 		console.error('chrome storage is not accessible');
 
 		return;
 	}
 	const formElement = document.getElementById('settingsForm');
-	chrome.storage.sync.get([storagedSettingsKey], (result) => {
-		const links = result[storagedSettingsKey].links
+	chrome.storage.local.get([storagedSettingsKey], function(result) {
+		const links = result[storagedSettingsKey]?.links;
+
+		if (!links) {
+			return;
+		}
 
 		formElement.innerHTML = '';
 		for (let linkData of links) {
@@ -83,7 +86,6 @@ function createRow(linkData = {}) {
 	}
 
 	content = rowTemplate
-		.replaceAll('#ROW_ID#', formElement.childElementCount)
 		.replaceAll('#REGEX_VALUE#', linkData.regex)
 		.replaceAll('#REPLACE_TO_VALUE#', linkData.replaceTo);
 
@@ -95,29 +97,36 @@ function createRow(linkData = {}) {
 
 function saveSettings() {
 	const formElement = document.getElementById('settingsForm'),
-		formData = new FormData(formElement);
+		formData = new FormData(formElement),
+		rowsCount = Object.values(formData).length / 2;
 
-	let links = [];
+	let links = new Array(rowsCount),
+		i = 0;
+	links.fill({});
 	for(let row of formData) {
-		const key = row[0] === 'regex' ? 'regex' : 'replaceTo',
+		i++;
+		const key = row[0],
 			value = row[1];
 
 		if (!key || !value) {
 			continue;
 		}
 
-		let newObj = {};
+		let newObj = links[Math.ceil(i / 2) - 1] ?? {};
 		newObj[key] = value;
 
-		links.push(newObj);
+		links[Math.ceil(i / 2) - 1] = newObj;
 	}
 
-	if (typeof chrome?.storage?.sync?.set !== 'function') {
+	if (typeof chrome?.storage?.local?.set !== 'function') {
 		console.error('chrome storage is not accessible');
 
 		return;
 	}
 
-	chrome.storage.sync.set({links: links}, console.log);
+	const result = {};
+	result[storagedSettingsKey] = {links: links};
+
+	chrome.storage.local.set(result);
 }
 
