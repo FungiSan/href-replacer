@@ -6,15 +6,14 @@ if (document.readyState === 'loading') {
 	initLinkReplacerSettings();
 }
 
-const storagedSettingsKey = 'linkReplacerSettings',
+const storedSettingsKey = 'linkReplacerSettings',
 	rowTemplate = '<label>Искомая строка: <input type="text" name="regex" value="#REGEX_VALUE#"></label>\
 	<label>На что заменить: <input type="text" name="replaceTo" value="#REPLACE_TO_VALUE#"></label>\
 	<input type="button" class="setting__delete" value="X" />';
 
 function initLinkReplacerSettings() {
 	const formElement = document.getElementById('settingsForm'),
-		saveButton = document.getElementById('saveButton'),
-		addRowButton = document.getElementById('addRowButton');
+		saveButton = document.getElementById('saveButton');
 
 	if (!formElement || !saveButton) {
 		return;
@@ -31,8 +30,8 @@ function initRows() {
 		return;
 	}
 	const formElement = document.getElementById('settingsForm');
-	chrome.storage.local.get([storagedSettingsKey], function(result) {
-		const links = result[storagedSettingsKey]?.links;
+	chrome.storage.local.get([storedSettingsKey], function(result) {
+		const links = result[storedSettingsKey]?.links;
 
 		if (!links) {
 			return;
@@ -68,8 +67,7 @@ function initHandlers() {
 
 function createRow(linkData = {}) {
 	const formElement = document.getElementById('settingsForm');
-	let newRow = document.createElement('div'),
-		content = rowTemplate;
+	let newRow = document.createElement('div');
 	newRow.className = 'settings__row';
 	if (!linkData?.regex || !linkData?.replaceTo) {
 		linkData = {
@@ -78,11 +76,9 @@ function createRow(linkData = {}) {
 		};
 	}
 
-	content = rowTemplate
+	newRow.innerHTML = rowTemplate
 		.replaceAll('#REGEX_VALUE#', linkData.regex)
 		.replaceAll('#REPLACE_TO_VALUE#', linkData.replaceTo);
-
-	newRow.innerHTML = content;
 
 	formElement.append(newRow);
 }
@@ -117,7 +113,7 @@ function saveSettings() {
 	}
 
 	const result = {};
-	result[storagedSettingsKey] = {links: links};
+	result[storedSettingsKey] = {links: links};
 
 	chrome.storage.local.set(result);
 }

@@ -17,7 +17,7 @@ function initLinkReplacer() {
 	chrome.storage.local.get(['linkReplacerSettings'], function(result) {
 		replaceLinksMapper = result['linkReplacerSettings']?.links;
 
-		globalThis.window.document.querySelectorAll('a').forEach(replaceLinkHref);
+		globalThis.window.document.querySelectorAll('a[href]').forEach(replaceLinkHref);
 	});
 }
 
@@ -30,6 +30,7 @@ function replaceLinkHref(linkElement) {
 	for (let replaceLinkData of replaceLinksMapper) {
 		const regexp = new RegExp(replaceLinkData.regex.replace('\\\\', '\\'), 'i');
 		if (currentHref.match(regexp)?.length > 0) {
+			linkElement.dataset.originalHref = linkElement.href;
 			linkElement.href = currentHref.replace(regexp, replaceLinkData.replaceTo);
 		}
 	}
