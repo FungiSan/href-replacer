@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +10,28 @@
 			box-sizing: border-box;
 			font-size: inherit;
 		}
-		html, body {
+
+		html,
+		body {
 			padding: 0;
 			margin: 0;
 		}
+
 		html {
 			font-size: 18px;
 			font-family: monospace;
 		}
+
 		body {
 			display: flex;
 			width: 100%;
+			min-width: 30em;
 			min-height: 30em;
 			height: 100vh;
 			align-items: stretch;
 			background-color: #c9c3c1;
 		}
+
 		main {
 			width: 100%;
 			margin: 1em;
@@ -33,14 +40,17 @@
 			border-radius: 5px;
 			box-shadow: 0 0 0px 1px #cfc, 0 0 30px #cfc;
 		}
+
 		.settings {
 			display: flex;
 			flex-flow: column nowrap;
 		}
+
 		.settings__title {
 			font-size: 1.5em;
 			line-height: 1em;
 		}
+
 		.settings__form {
 			flex: 1;
 			overflow-y: auto;
@@ -57,6 +67,7 @@
 			padding-bottom: .5em;
 			padding-right: 2em;
 		}
+
 		.settings__row::after {
 			content: '';
 			display: block;
@@ -67,6 +78,7 @@
 			height: 2px;
 			background-image: linear-gradient(to right, #494, #383, #494);
 		}
+
 		.setting__delete {
 			position: absolute;
 			top: 50%;
@@ -88,9 +100,11 @@
 			color: #fff;
 			cursor: pointer;
 		}
+
 		.setting__delete:hover {
 			background-color: #700;
 		}
+
 		.settings__row input {
 			display: block;
 		}
@@ -101,6 +115,7 @@
 			gap: 1em;
 			padding-top: 1em;
 		}
+
 		.settings__button {
 			flex: 1;
 			max-width: 15em;
@@ -110,13 +125,16 @@
 			font-size: 1em;
 			cursor: pointer;
 		}
+
 		.settings__save-button {
 			background-color: #282;
 			color: #fff;
 		}
+
 		.settings__save-button:hover {
 			background-color: #393;
 		}
+
 		.settings__save-button:active {
 			background-color: #171;
 		}
@@ -124,10 +142,12 @@
 		.settings__add-row-button {
 			background-color: #fff;
 		}
+
 		.settings__add-row-button:hover {
 			background-color: #eee;
 			color: #000;
 		}
+
 		.settings__add-row-button:active {
 			background-color: #fff;
 			color: #000;
@@ -135,6 +155,7 @@
 	</style>
 	<script src="./dist/settings.js"></script>
 </head>
+
 <body>
 	<main class="settings">
 		<h1 class="settings__title">Настройки замены ссылок</h1>
@@ -151,4 +172,5 @@
 		</div>
 	</main>
 </body>
+
 </html>
